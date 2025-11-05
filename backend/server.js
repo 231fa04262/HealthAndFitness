@@ -191,9 +191,28 @@ const app = express();
 // ===============================
 app.use(express.json());
 
-// Allow CORS (Frontend URL or wildcard for dev)
-const corsOrigin = process.env.CLIENT_ORIGIN || '*';
-app.use(cors({ origin: corsOrigin, credentials: true }));
+// Allow CORS - Support multiple origins
+const allowedOrigins = process.env.CLIENT_ORIGIN 
+  ? process.env.CLIENT_ORIGIN.split(',').map(o => o.trim())
+  : ['http://localhost:5173'];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin) return callback(null, true);
+    
+    // Check if wildcard
+    if (allowedOrigins.includes('*')) return callback(null, true);
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 
 // Logging (only in development)
 if (process.env.NODE_ENV !== 'production') {
