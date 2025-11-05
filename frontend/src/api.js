@@ -1,29 +1,7 @@
-// import axios from 'axios'
-
-// const api = axios.create({
-//   baseURL: 'http://localhost:5000/api',
-// })
-
-// api.interceptors.request.use((config) => {
-//   const token = localStorage.getItem('token')
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`
-//   }
-//   return config
-// })
-
-// export default api
-
-
 import axios from 'axios'
 
 const api = axios.create({
-<<<<<<< HEAD
-  baseURL: 'https://healthandfitness-2.onrender.com/api',
-
-=======
-  baseURL: import.meta.env.VITE_API_URL + '/api',
->>>>>>> d51fce7 (Fix vite permission issue)
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://healthandfitness-2.onrender.com/api',
 })
 
 api.interceptors.request.use((config) => {
@@ -35,4 +13,3 @@ api.interceptors.request.use((config) => {
 })
 
 export default api
-
